@@ -8,19 +8,19 @@ function getSites(page, sites){
 	req.onload = function(){
 		response = JSON.parse(req.response);
 
-		var newSites = _.pluck(response.items, "api_site_parameter");
-		sites = sites.concat(newSites);
-
-		// console.debug("2 sites", sites);
+		for(var item in response.items){
+			var site = response.items[item]
+			sites[site.name] = site.api_site_parameter;
+		};
 
 		if(response.has_more){
 			getSites(page+1, sites);
 		}else{
 			window.Stacker.sites = sites;
-			// console.debug("all sites: ", window.Stacker.sites);
+			// console.debug("all sites: ", JSON.stringify(window.Stacker.sites));
 		}
 	};
 req.send(null);
 }
 
-// getSites(1, []);
+// getSites(1, {});
