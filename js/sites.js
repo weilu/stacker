@@ -9,15 +9,15 @@ function getSites(page, sites){
 		response = JSON.parse(req.response);
 
 		for(var item in response.items){
-			var site = response.items[item]
-			sites[site.name] = site.api_site_parameter;
-		};
+			var site = response.items[item];
+			sites[site.name] = site;
+		}
 
 		if(response.has_more){
 			getSites(page+1, sites);
 		}else{
 			window.Stacker.sites = sites;
-			// console.debug("all sites: ", JSON.stringify(window.Stacker.sites));
+//			console.debug("all sites: ", JSON.stringify(window.Stacker.sites));
 		}
 	};
 req.send(null);
