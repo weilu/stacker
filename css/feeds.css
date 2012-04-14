@@ -1,0 +1,28 @@
+body {
+  font-family: Trebuchet MS,Liberation Sans,DejaVu Sans,sans-serif;
+}
+
+ul{
+  list-style: none;
+}
+
+li{
+  position: relative;
+  overflow: hidden;
+}
+
+.profile{
+  float: left;
+  width: 40px;
+  height: 40px;
+  margin: 0 5px 5px 0;
+}
+
+.right{
+  float: right;
+  color: grey;
+}
+
+.name{
+  font-weight: bold;
+}

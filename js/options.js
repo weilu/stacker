@@ -10,6 +10,8 @@ $(function(){
     },
 
     initialize: function(){
+      this.ul = $('ul#following');
+
       this.following = {};
       this.sitesToUsers = {};
 
@@ -38,18 +40,22 @@ $(function(){
       var select = $('select#site');
       select.empty();
       for(var siteName in Stacker.sites){
-        select.append("<option value='" + this._getSite(siteName) + "'>" + siteName + "</optoins>");
+        select.append("<option value='" + siteName + "'>" + siteName + "</optoins>");
       }
     },
 
     displayFollowing: function(){
-      var ul = $('ul#following');
-      ul.empty();
+      this.ul.empty();
       
       for(var userId in this.following){
-        ul.append("<li id='user_" + userId + "'>" + this.following[userId].name + "</li>");
+        this.renderUser(userId);
         this._addSitesToUser(userId);
       }
+    },
+
+    renderUser: function(userId){
+      var user = this.following[userId];
+      this.ul.append("<li id='user_" + userId + "'><img class='profile' src='" + user.image + "'/><span>" + user.name + "</span><br></li>");
     },
 
     follow: function(){
@@ -66,7 +72,7 @@ $(function(){
     },
 
     _getUser: function(site, userId){
-      var url = "http://api.stackexchange.com/2.0/users/" + userId + "?site=" + site;
+      var url = "http://api.stackexchange.com/2.0/users/" + userId + "?site=" + Stacker.sites[site].api_site_parameter;
       var req = new XMLHttpRequest();
       req.open("GET", url, true);
 
@@ -85,8 +91,8 @@ $(function(){
         return; //already following
       }
 
-      var ul = $('ul#following');
-      ul.append("<li id='user_" + user.account_id + "'>" + user.display_name + "</li>");
+      this.following[user.account_id] = {name: user.display_name, image: user.profile_image};
+      this.renderUser(user.account_id);
       
       this._updateLocalStorage(user);
     },
@@ -105,14 +111,13 @@ $(function(){
           var account = items[index];
           accounts.push(account);
 
-          var site = view._getSite(account.site_name);
+          var site = account.site_name;
           if(!view.sitesToUsers[site]){
-            view.sitesToUsers[site] = [];
+            view.sitesToUsers[site] = {};
           }
-          view.sitesToUsers[site].push(account.user_id);
-          view.sitesToUsers[site] =  _.uniq(view.sitesToUsers[site]);
+          view.sitesToUsers[site][account.user_id] = accountId;
         }
-        view.following[accountId] = {name: user.display_name, accounts: accounts};
+        view.following[accountId].accounts = accounts;
         view._addSitesToUser(accountId);
 
         view._save();
@@ -120,16 +125,11 @@ $(function(){
       req.send(null);
     },
 
-    _getSite: function(siteName){
-      return Stacker.sites[siteName].api_site_parameter;
-    },
-
     _addSitesToUser: function(accountId){
       for(var accountIndex in this.following[accountId].accounts){
         var account = this.following[accountId].accounts[accountIndex];
         var site = Stacker.sites[account.site_name];
         var siteIcon = "<img src='" + site.favicon_url + "' title='" + site.name + "' />";
-        console.debug($(siteIcon));
         $("li#user_" + accountId).append(siteIcon)
       }
     },
@@ -138,6 +138,12 @@ $(function(){
       localStorage["stacker"] = JSON.stringify({following: this.following, sitesToUsers: this.sitesToUsers});
     }
   });
+
+  //save all stackexchange sites to localStorage if not found
+  var stackerSitesStorage = localStorage["stacker_sites"];
+  if(!stackerSitesStorage){
+    localStorage["stacker_sites"] = JSON.stringify(Stacker.sites);
+  }
 
   window.view = new Stacker.OptView().render();
 });
