@@ -43,13 +43,14 @@ $(function(){
     render: function(){
       // console.debug("model", this.model);
       this.dateAbsolute = new Date(1000 * this.model.get('creation_date'));
-      this.dateRelative = $.timeago(this.dateAbsolute);
+      this.dateRelative = this.dateAbsolute.getDate() ? $.timeago(this.dateAbsolute) : '';
       this.timelineType = this.model.get('timeline_type');
       this.postType = this.model.get('post_type');
       this.site = Stacker.Utils.getSite(this.model.get('site_name'));
       this.user = Stacker.Utils.getUser(this.site.name, this.model.get('user_id'));
       this.userUrl = this.site.site_url + "/u/" + this.model.get('user_id');
-      this.postUrl = this.site.site_url + "/q/" + this.model.get('post_id');
+      this.postUrl = this.model.get('post_id') ? this.site.site_url + "/q/" + this.model.get('post_id') : '#';
+      this.postTitle = this.model.get('title') ? this.model.get('title') : '';
       this.detail = this.model.get('detail') ? this.model.get('detail') : '';
 
       this.$el.append("<img class='profile' src='" + this.user.image + 
@@ -58,7 +59,7 @@ $(function(){
                       "' /><span class='type left'> " + this.timelineType +
                       "</span><span class='right date relative'>" + this.dateRelative + "</span>" +
                       "<span class='right date absolute'>" + this.dateAbsolute + "</span>" +
-                      "<br><a href='" + this.postUrl + "'>" + this.model.get('title') + "</a><br>" +
+                      "<br><a href='" + this.postUrl + "'>" + this.postTitle + "</a><br>" +
                       "<p>" + this.detail + "</p></span>");
       return this;
     }
@@ -98,7 +99,7 @@ $(function(){
   var stackerStorage = localStorage['stacker'];
   var stackerSitesStorage = localStorage['stacker_sites'];
   if(!stackerStorage || !stackerSitesStorage){
-    $('body').append("<p>There's nothing here because you are not following anyone yet! <a href='./options.html'>Start stalking</a></p>");
+    $('#stacker').append("<p>There's nothing here because you are not following anyone yet! <a href='./options.html'>Start stalking</a></p>");
     return;
   }
 
