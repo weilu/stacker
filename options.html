@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Stacker Options</title>
-    <link rel="stylesheet" href="css/options.css" type="text/css" />
+    <link rel="stylesheet" href="css/feeds.css" type="text/css" />
     <script src="js/lib/zepto.js" type="text/javascript"></script>
     <script src="js/lib/underscore.js" type="text/javascript"></script>
     <script src="js/lib/backbone.js" type="text/javascript"></script>
@@ -9,19 +9,22 @@
   </head>
   
   <body>
+    <header><a href="./feeds.html"><h2>Stacker</h2></a></header>
 
-    <h2>Start Following</h2>
-    <label>StackExchange Site</label>
-    <select id="site">
-    </select>
+    <div id="stacker">
 
-    <label>User ID: </label>
-    <input type="text" id="user_id">
+      <h3>Start Following</h3>
+      <select id="site">
+      </select>
 
-    <button>Follow</button>
+      <label>User ID: </label>
+      <input type="text" id="user_id">
 
-    <h2>Currently Following</h2>
-    <ul id="following"></ul>
+      <button>Follow</button>
 
+      <h3>Currently Following</h3>
+      <ul id="following"></ul>
+
+    </div>
   </body>
 </html>

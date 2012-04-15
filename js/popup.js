@@ -42,16 +42,24 @@ $(function(){
     tagName: 'li',
     render: function(){
       // console.debug("model", this.model);
-      this.date = new Date(1000 * this.model.get('creation_date'));
+      this.dateAbsolute = new Date(1000 * this.model.get('creation_date'));
+      this.dateRelative = $.timeago(this.dateAbsolute);
       this.timelineType = this.model.get('timeline_type');
       this.postType = this.model.get('post_type');
       this.site = Stacker.Utils.getSite(this.model.get('site_name'));
       this.user = Stacker.Utils.getUser(this.site.name, this.model.get('user_id'));
+      this.userUrl = this.site.site_url + "/u/" + this.model.get('user_id');
+      this.postUrl = this.site.site_url + "/q/" + this.model.get('post_id');
+      this.detail = this.model.get('detail') ? this.model.get('detail') : '';
 
       this.$el.append("<img class='profile' src='" + this.user.image + 
-                      "'/><span class='name left'>" + this.user.name + " </span><span class='type left'>" + this.timelineType + " " + this.postType +
-                      "</span><span class='right'>" + this.date + "</span><br>" + 
-                      "<p>" + this.model.get('title') + "</p>"); //TODO
+                      "'/><span class='activity'><a class='name left' href='" + this.userUrl + "'>" + this.user.name +
+                      "</a><img src='" + this.site.favicon_url + "' title='" + this.site.name +
+                      "' /><span class='type left'> " + this.timelineType +
+                      "</span><span class='right date relative'>" + this.dateRelative + "</span>" +
+                      "<span class='right date absolute'>" + this.dateAbsolute + "</span>" +
+                      "<br><a href='" + this.postUrl + "'>" + this.model.get('title') + "</a><br>" +
+                      "<p>" + this.detail + "</p></span>");
       return this;
     }
   });

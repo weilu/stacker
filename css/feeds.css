@@ -1,14 +1,50 @@
 body {
   font-family: Trebuchet MS,Liberation Sans,DejaVu Sans,sans-serif;
+  margin: 0;
+}
+
+h2 {
+  margin: 0;
+  display: inline-block;
+}
+
+a {
+  text-decoration: none;
+  color: rgb(42, 60, 94);
+}
+
+a:hover {
+  background: url('../images/bg-hatchlines.png') repeat-x;
+  color: white;
+}
+
+header {
+  box-sizing: border-box;
+  padding: 5px 20px;
+  height: 38px;
+  background: url('../images/bg-hatchlines.png');
+  color: white;
+}
+
+header a{
+  color: white;
 }
 
 ul{
   list-style: none;
+  margin: 0 10px;
+  padding: 0;
 }
 
 li{
   position: relative;
   overflow: hidden;
+  border-bottom:  1px solid whitesmoke;
+  margin-top: 15px;
+}
+
+#stacker{
+  padding: 20px
 }
 
 .profile{
@@ -25,4 +61,23 @@ li{
 
 .name{
   font-weight: bold;
+}
+
+.activity{
+  display: inline-block;
+  width: 80%
+}
+
+.date.absolute{
+  display: none;
+}
+
+.date.relative:hover{
+  color: white;
+  width: 0;
+  height: 0;
+}
+
+.date.relative:hover + .date.absolute{
+  display: inline-block;
 }
