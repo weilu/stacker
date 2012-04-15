@@ -1,7 +1,8 @@
 body {
   font-family: Trebuchet MS,Liberation Sans,DejaVu Sans,sans-serif;
-  margin: 0;
-  min-width: 700px;
+  font-size: 12px;
+  margin: 0 auto;
+  width: 700px;
   padding: 10px
 }
 
@@ -10,12 +11,12 @@ h2 {
   display: inline-block;
 }
 
-a {
+a, a.right.unfollow {
   text-decoration: none;
   color: rgb(42, 60, 94);
 }
 
-a:hover {
+a:hover, a.right.unfollow:hover {
   background: url('../images/bg-hatchlines.png') repeat-x;
   color: white;
   border-radius: 3px;
@@ -42,7 +43,7 @@ header a.right:hover{
 
 ul{
   list-style: none;
-  margin: 0 5px;
+  margin: 0;
   padding: 0;
 }
 
@@ -71,7 +72,7 @@ li{
 
 .activity{
   display: inline-block;
-  width: 80%
+  width: 655px
 }
 
 .date.absolute{

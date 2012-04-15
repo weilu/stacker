@@ -70,7 +70,11 @@ $(function(){
   Stacker.BaseFeeds = Backbone.Collection.extend({
     model: Stacker.Feed,
     comparator: function(feed){
-      return -feed.get("creation_date");
+      var date = feed.get("creation_date");
+      if(!date){
+        date = 0;
+      }
+      return -date;
     }
   });
 
@@ -84,7 +88,7 @@ $(function(){
       return "https://api.stackexchange.com/2.0/users/"
               + encodeURIComponent(this.userIds.join(";"))
               + "/timeline?site=" 
-              + Stacker.Utils.getSite(site).api_site_parameter;
+              + Stacker.Utils.getSite(this.site).api_site_parameter;
     },
 
     parse: function(response){
@@ -113,11 +117,30 @@ $(function(){
   }
 
   var totalDone = 0;
-  for(var site in Stacker.sitesToUsers){
-    var feeds = new Stacker.Feeds({site: site, users: Stacker.sitesToUsers[site]});
-    feeds.fetch({
-      success: sortAndDisplay
-    });
+  fetchFeedsInBatch(30, 0);
+
+  function fetchFeedsInBatch(size, page){
+    var start = size * page + 1;
+    var counter = 0;
+    for(var site in Stacker.sitesToUsers){
+      counter++;
+
+      if(counter < start){
+        continue;
+      }
+
+      var feeds = new Stacker.Feeds({site: site, users: Stacker.sitesToUsers[site]});
+      feeds.fetch({
+        success: sortAndDisplay
+      });
+
+      if(counter == 30){
+        setTimeout(function(){
+         fetchFeedsInBatch(size, page+1);
+        }, 1000);
+        break;
+      }
+    }
   }
 
   function sortAndDisplay(collection, response){

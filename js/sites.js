@@ -16,8 +16,12 @@ function getSites(page, sites){
 		if(response.has_more){
 			getSites(page+1, sites);
 		}else{
-			window.Stacker.sites = sites;
-//			console.debug("all sites: ", JSON.stringify(window.Stacker.sites));
+			window.Stacker.sites = {};
+			var keys = Object.keys(sites).sort();
+			for(var i in keys){
+			  window.Stacker.sites[keys[i]] = sites[keys[i]];
+			}
+			console.debug("all sites: ", JSON.stringify(window.Stacker.sites));
 		}
 	};
 req.send(null);
